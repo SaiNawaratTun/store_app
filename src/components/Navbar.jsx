@@ -9,9 +9,9 @@ export default function Navbar() {
                     <Link to={'/'}>Logo</Link>
                 </div>
                 <div className='flex space-x-3'>
-                    <Link to={'/'}>Home</Link>
-                    <Link to={'/create'}>Create</Link>
-                    <li>About</li>
+                    <Link to={'/'} className='font-medium'>Home</Link>
+                    <Link to={'/create'} className='font-medium'>Create</Link>
+                    <li className='font-medium'>About</li>
                 </div>
             </ul>
         </div>

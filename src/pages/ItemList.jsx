@@ -1,11 +1,17 @@
 import React from 'react'
 import useFirestore from '../hooks/useFirestore'
+import trash from '../assets/trash.svg'
+import pencil from '../assets/pencil.svg'
 
 export default function ItemList() {
 
-    let { getcollection } = useFirestore()
+    let { getcollection, deleteCollection } = useFirestore()
 
     let { data: items } = getcollection('items');
+
+    let deleteItem = async (id) => {
+        await deleteCollection('items', id)
+    }
 
     return (
         <div className='w-full'>
@@ -26,6 +32,10 @@ export default function ItemList() {
                         <img src={item.image} alt="" className=' h-36 md:h-64' />
                         <h2>{item.title}</h2>
                         <p>{item.price} kyats</p>
+                        <div className='w-full flex justify-center gap-2'>
+                            <img src={pencil} alt="" className=' cursor-pointer' />
+                            <img src={trash} alt="" className=' cursor-pointer' onClick={e => deleteItem(item.id)} />
+                        </div>
                     </div>
                 ))}
             </div>}

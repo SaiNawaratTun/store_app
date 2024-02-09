@@ -61,7 +61,7 @@ export default function ItemForm() {
     }
 
     return (
-        <div className='w-full flex justify-center p-8'>
+        <div className='w-full flex justify-center p-8 '>
             <form className="w-full max-w-lg" onSubmit={submitForm}>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
@@ -86,7 +86,9 @@ export default function ItemForm() {
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="">
                             Image
                         </label>
-                        <input className='' type="file" onChange={handleImageChange} />
+                        <input class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4
+                                    file:rounded-lg file:border-1 file:font-bold file:bg-blue-50 file:text-blue-700
+                                 hover:file:bg-blue-100" type="file" onChange={handleImageChange} />
                         {!!preview && <img src={preview} alt="" className='w-full md:w-1/2 mt-2' />}
                     </div>
                 </div>

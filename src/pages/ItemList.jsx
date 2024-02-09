@@ -2,6 +2,7 @@ import React from 'react'
 import useFirestore from '../hooks/useFirestore'
 import trash from '../assets/trash.svg'
 import pencil from '../assets/pencil.svg'
+import { Link } from 'react-router-dom'
 
 export default function ItemList() {
 
@@ -33,7 +34,9 @@ export default function ItemList() {
                         <h2>{item.title}</h2>
                         <p>{item.price} kyats</p>
                         <div className='w-full flex justify-center gap-2'>
-                            <img src={pencil} alt="" className=' cursor-pointer' />
+                            <Link to={`/edit/${item.id}`} className=' cursor-pointer'>
+                                <img src={pencil} alt="" />
+                            </Link>
                             <img src={trash} alt="" className=' cursor-pointer' onClick={e => deleteItem(item.id)} />
                         </div>
                     </div>

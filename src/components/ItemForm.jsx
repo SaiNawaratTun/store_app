@@ -1,20 +1,43 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react'
-import { storage } from '../firebase';
+import { db, storage } from '../firebase';
 import useFirestore from '../hooks/useFirestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { doc, getDoc } from '@firebase/firestore';
 
 export default function ItemForm() {
+
+    let { id } = useParams();
     let [title, setTitle] = useState('');
     let [price, setPrice] = useState('');
     let [type, setType] = useState('food');
     let [file, setFile] = useState(null);
     let [preview, setPreview] = useState('')
     let [loading, setLoading] = useState(false)
+    let [edit, setEdit] = useState(false)
 
     let navigate = useNavigate();
 
     let { addCollection } = useFirestore()
+
+    useEffect(() => {
+        if (id) {
+            setEdit(true)
+            let ref = doc(db, 'items', id)
+            getDoc(ref).then(doc => {
+                if (doc.exists()) {
+                    let { title, price, type, image } = doc.data();
+                    setTitle(title)
+                    setPrice(price)
+                    setType(type)
+                    setPreview(image)
+                }
+            })
+        } else {
+            setEdit(false)
+            console.log('create')
+        }
+    }, [])
 
     let handleImageChange = (e) => {
         e.preventDefault();
@@ -86,7 +109,7 @@ export default function ItemForm() {
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="">
                             Image
                         </label>
-                        <input class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4
+                        <input className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4
                                     file:rounded-lg file:border-1 file:font-bold file:bg-blue-50 file:text-blue-700
                                  hover:file:bg-blue-100" type="file" onChange={handleImageChange} />
                         {!!preview && <img src={preview} alt="" className='w-full md:w-1/2 mt-2' />}
@@ -109,11 +132,11 @@ export default function ItemForm() {
                 </div>
                 <div className='border rounded-lg text-center bg-blue-500 w-full' >
                     <button className='w-full px-1 py-2 text-white text-xl flex justify-center items-center' onClick={submitForm}>
-                        {loading && <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        {loading && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>}
-                        <p>Create</p>
+                        <p>{edit ? 'Update' : 'Create'}</p>
                     </button>
                 </div>
 

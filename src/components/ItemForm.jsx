@@ -18,7 +18,7 @@ export default function ItemForm() {
 
     let navigate = useNavigate();
 
-    let { addCollection } = useFirestore()
+    let { addCollection, updateDocument } = useFirestore()
 
     useEffect(() => {
         if (id) {
@@ -35,7 +35,10 @@ export default function ItemForm() {
             })
         } else {
             setEdit(false)
-            console.log('create')
+            setTitle('')
+            setPrice('')
+            setType('')
+            setPreview('')
         }
     }, [])
 
@@ -77,8 +80,11 @@ export default function ItemForm() {
             type,
             image: url
         }
-        await addCollection('items', data);
-
+        if (edit) {
+            await updateDocument('items', data, id)
+        } else {
+            await addCollection('items', data);
+        }
         navigate('/')
 
     }
